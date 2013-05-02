@@ -30,6 +30,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
+#include <cairo.h>
+
 #include <wayland-client.h>
 #include "wayland-drm-client-protocol.h"
 
@@ -113,7 +116,7 @@ int
 main (int argc, char **argv)
 {
 	drm_intel_bo *bo;
-	int width, height;	
+	int pitch, height, width;	
 	int i;
 	uint32_t name;
 	struct wl_display *display;
@@ -123,6 +126,16 @@ main (int argc, char **argv)
 	struct wl_surface *surface;
 	struct wl_shell_surface *shell_surface;
 	struct wl_buffer *buffer;
+	cairo_surface_t *cairo_surface;
+	unsigned char *data;
+
+	if (argc < 2)
+		exit (-1);
+
+	cairo_surface = cairo_image_surface_create_from_png (argv[1]);
+
+	if (!cairo_surface)
+		exit (-1);
 
 	display = wl_display_connect (NULL);
 	registry = wl_display_get_registry (display);
@@ -140,18 +153,18 @@ main (int argc, char **argv)
 		wl_display_dispatch (display);
 
 	bufmgr = drm_intel_bufmgr_gem_init (fd, 4096);
-	width = 100;
-	height = 100;
+	pitch = cairo_image_surface_get_stride (cairo_surface);
+	width = cairo_image_surface_get_width (cairo_surface);
+	height = cairo_image_surface_get_height (cairo_surface);
+	data = cairo_image_surface_get_data (cairo_surface);
+
 	bo = drm_intel_bo_alloc (bufmgr,
 				 "wl-drm-test",
-				 width * height * 4,
+				 pitch * height,
 				 4096);
 	drm_intel_bo_map (bo, 1);
-	p = bo->virtual;
-	for (i = 0; i < width * height; i++)
-	{
-		p[i] = 0x80ffff80;
-	}
+
+	memcpy (bo->virtual, data, pitch * height);
 	drm_intel_bo_unmap (bo);
 
 	drm_intel_bo_flink (bo, &name);
@@ -160,7 +173,7 @@ main (int argc, char **argv)
 				       name,
 				       width,
 				       height,
-				       width * 4,
+				       pitch,
 				       WL_DRM_FORMAT_XRGB8888,
 				       0);
 	wl_surface_attach (surface, buffer, 0, 0);
