@@ -178,8 +178,9 @@ main (int argc, char **argv)
 				       WL_DRM_FLAGS_S3D_FP);
 	wl_surface_attach (surface, buffer, 0, 0);
 	wl_surface_damage (surface, 0, 0, width, height);
+	wl_shell_surface_set_fullscreen (shell_surface, WL_SHELL_SURFACE_FULLSCREEN_METHOD_DRIVER, 0, NULL);
 	wl_surface_commit (surface);
-
+ 
 	while (ret != -1)
 	{
 		ret = wl_display_dispatch (display);
