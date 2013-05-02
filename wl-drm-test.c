@@ -175,7 +175,7 @@ main (int argc, char **argv)
 				       height,
 				       pitch,
 				       WL_DRM_FORMAT_XRGB8888,
-				       0);
+				       WL_DRM_FLAGS_S3D_FP);
 	wl_surface_attach (surface, buffer, 0, 0);
 	wl_surface_damage (surface, 0, 0, width, height);
 	wl_surface_commit (surface);
