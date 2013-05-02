@@ -39,6 +39,7 @@
 static struct wl_drm *drm = NULL;
 static struct wl_compositor *compositor = NULL;
 static struct wl_shell *shell = NULL;
+static struct wl_output *output = NULL;
 static drm_intel_bufmgr *bufmgr = NULL;
 int fd = 0;
 
@@ -103,6 +104,12 @@ registry_handle_global (void *data,
 					  name,
 					  &wl_shell_interface,
 					  1);
+	} else if (strcmp (interface, "output") == 0)
+	{
+		output = wl_registry_bind (registry,
+					   name,
+					   &wl_output_interface,
+					   1);
 	}
 
 }
@@ -178,7 +185,10 @@ main (int argc, char **argv)
 				       WL_DRM_FLAGS_S3D_FP);
 	wl_surface_attach (surface, buffer, 0, 0);
 	wl_surface_damage (surface, 0, 0, width, height);
-	wl_shell_surface_set_fullscreen (shell_surface, WL_SHELL_SURFACE_FULLSCREEN_METHOD_DRIVER, 0, NULL);
+	wl_shell_surface_set_fullscreen (shell_surface,
+					 WL_SHELL_SURFACE_FULLSCREEN_METHOD_DRIVER,
+					 0,
+					 output);
 	wl_surface_commit (surface);
  
 	while (ret != -1)
