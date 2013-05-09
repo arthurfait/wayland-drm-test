@@ -104,7 +104,7 @@ registry_handle_global (void *data,
 					  name,
 					  &wl_shell_interface,
 					  1);
-	} else if (strcmp (interface, "output") == 0)
+	} else if (strcmp (interface, "wl_output") == 0)
 	{
 		output = wl_registry_bind (registry,
 					   name,
