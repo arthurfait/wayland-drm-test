@@ -183,7 +183,7 @@ wl_drm_authenticate(struct wl_drm *wl_drm, uint32_t id)
 }
 
 static inline struct wl_buffer *
-wl_drm_create_buffer(struct wl_drm *wl_drm, uint32_t name, int32_t width, int32_t height, uint32_t stride, uint32_t format, uint32_t flags)
+wl_drm_create_buffer(struct wl_drm *wl_drm, uint32_t name, int32_t width, int32_t height, int32_t physical_width, int32_t physical_height, uint32_t stride, uint32_t format, uint32_t flags)
 {
 	struct wl_proxy *id;
 
@@ -193,13 +193,13 @@ wl_drm_create_buffer(struct wl_drm *wl_drm, uint32_t name, int32_t width, int32_
 		return NULL;
 
 	wl_proxy_marshal((struct wl_proxy *) wl_drm,
-			 WL_DRM_CREATE_BUFFER, id, name, width, height, stride, format, flags);
+			 WL_DRM_CREATE_BUFFER, id, name, width, height, physical_width, physical_height, stride, format, flags);
 
 	return (struct wl_buffer *) id;
 }
 
 static inline struct wl_buffer *
-wl_drm_create_planar_buffer(struct wl_drm *wl_drm, uint32_t name, int32_t width, int32_t height, uint32_t format, int32_t offset0, int32_t stride0, int32_t offset1, int32_t stride1, int32_t offset2, int32_t stride2, uint32_t flags)
+wl_drm_create_planar_buffer(struct wl_drm *wl_drm, uint32_t name, int32_t width, int32_t height, int32_t physical_width, int32_t physical_height, uint32_t format, int32_t offset0, int32_t stride0, int32_t offset1, int32_t stride1, int32_t offset2, int32_t stride2, uint32_t flags)
 {
 	struct wl_proxy *id;
 
@@ -209,7 +209,7 @@ wl_drm_create_planar_buffer(struct wl_drm *wl_drm, uint32_t name, int32_t width,
 		return NULL;
 
 	wl_proxy_marshal((struct wl_proxy *) wl_drm,
-			 WL_DRM_CREATE_PLANAR_BUFFER, id, name, width, height, format, offset0, stride0, offset1, stride1, offset2, stride2, flags);
+			 WL_DRM_CREATE_PLANAR_BUFFER, id, name, width, height, physical_width, physical_height, format, offset0, stride0, offset1, stride1, offset2, stride2, flags);
 
 	return (struct wl_buffer *) id;
 }

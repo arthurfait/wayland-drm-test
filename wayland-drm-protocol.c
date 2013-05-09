@@ -40,7 +40,11 @@ static const struct wl_interface *types[] = {
 	NULL,
 	NULL,
 	NULL,
+	NULL,
+	NULL,
 	&wl_buffer_interface,
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -56,8 +60,8 @@ static const struct wl_interface *types[] = {
 
 static const struct wl_message wl_drm_requests[] = {
 	{ "authenticate", "u", types + 0 },
-	{ "create_buffer", "nuiiuuu", types + 1 },
-	{ "create_planar_buffer", "nuiiuiiiiiiu", types + 8 },
+	{ "create_buffer", "nuiiiiuuu", types + 1 },
+	{ "create_planar_buffer", "nuiiiiuiiiiiiu", types + 10 },
 };
 
 static const struct wl_message wl_drm_events[] = {
