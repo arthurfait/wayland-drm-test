@@ -178,9 +178,9 @@ main (int argc, char **argv)
 
 	buffer = wl_drm_create_buffer (drm,
 				       name,
-				       width,
 				       1280,
 				       720,
+				       width,
 				       height,
 				       pitch,
 				       WL_DRM_FORMAT_XRGB8888,
